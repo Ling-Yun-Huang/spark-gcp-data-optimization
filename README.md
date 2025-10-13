@@ -6,22 +6,22 @@ This repository details a significant Big Data coursework from my MSc in Data Sc
 
 ### 1. Preprocessing and Parallelisation with Spark
 
-**Task:** Preprocess image data (Flowers dataset) using TensorFlow and parallelise the process with Apache Spark on Google Cloud.  
-**Code:** The preprocessing logic was adapted for Spark and executed using Google Cloud Dataproc.  
-**Tools Used:** Apache Spark, Google Cloud Dataproc, Python  
-**Key Achievement:** Engineered a highly scalable $\mathbf{PySpark}$ pipeline on $\mathbf{Dataproc}$, resulting in a **$\mathbf{40x}$ $\mathbf{speedup}$** in data retrieval and preprocessing, directly supporting $\mathbf{ML}$ iteration efficiency.  
+- **Task:** Preprocess image data (Flowers dataset) using TensorFlow and parallelise the process with Apache Spark on Google Cloud.  
+- **Code:** The preprocessing logic was adapted for Spark and executed using Google Cloud Dataproc.  
+- **Tools Used:** Apache Spark, Google Cloud Dataproc, Python  
+- **Key Achievement:** Engineered a highly scalable $\mathbf{PySpark}$ pipeline on $\mathbf{Dataproc}$, resulting in a **$\mathbf{40x}$ $\mathbf{speedup}$** in data retrieval and preprocessing, directly supporting $\mathbf{ML}$ iteration efficiency.  
 
 ### 2. Measuring Cloud Performance
 
-**Task:** Parallelise the measurement of reading speeds and benchmark performance across various cloud configurations using Spark.  
-**Code:** Performance measuring code executed in cloud environments, utilising Spark for parallel processing.  
-**Tools Used:** Apache Spark, Google Cloud Dataproc  
-**Key Achievement:** Performed rigorous cloud $\mathbf{I/O}$ and $\mathbf{ETL}$ performance benchmarking. Used metrics to strategically implement optimizations like **$\mathbf{TFRecord}$ and partition tuning** to reduce overall processing time by **$\mathbf{>50\%}$**.  
+- **Task:** Parallelise the measurement of reading speeds and benchmark performance across various cloud configurations using Spark.  
+- **Code:** Performance measuring code executed in cloud environments, utilising Spark for parallel processing.  
+- **Tools Used:** Apache Spark, Google Cloud Dataproc  
+- **Key Achievement:** Performed rigorous cloud $\mathbf{I/O}$ and $\mathbf{ETL}$ performance benchmarking. Used metrics to strategically implement optimizations like **$\mathbf{TFRecord}$ and partition tuning** to reduce overall processing time by **$\mathbf{>50\%}$**.  
 
 ### 3. Theoretical Discussion
 
-**Task:** A theoretical analysis based on a paper discussed in the report.  
-**Outcome:** Analytical answers provided as a part of the coursework submission.  
+- **Task:** A theoretical analysis based on a paper discussed in the report.  
+- **Outcome:** Analytical answers provided as a part of the coursework submission.  
 
 ## Technologies & Tools Used:
 
