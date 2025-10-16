@@ -19,13 +19,21 @@ This section details the core architectural decisions and scientific methodologi
 
 ### Part I: Implementation and Resource Optimisation
 
-1. Scalable Data Transformation Pipeline
-   - Problem: To eliminate the single-point bottleneck inherent in raw file I/O and serialisation during ETL phases.
-   - Solution: Leveraged the PySpark RDD functions to fully distribute the data transformation and TFRecord writing operations, enabling parallel I/O streams across all Worker nodes.
+**1. Scalable Data Transformation Pipeline**
+   - **Problem**: To eliminate the single-point bottleneck inherent in raw file I/O and serialisation during ETL phases.
+   - **Solution**: Leveraged the **PySpark RDD** functions to fully distribute the data transformation and TFRecord writing operations, enabling parallel **I/O streams across all Worker** nodes. (See code/tfrecord_parallel_writer.py)
 
-2. Resource Governance and Cluster Optimisation
+**2. Resource Governance and Cluster Optimisation**
    - Strategy: Executed precise GCP Dataproc Cluster Configuration (e.g., utilising SSD persistent disks and high vCPU counts) to shift the pipeline's bottleneck from CPU to network I/O.
-   - Result: Ensured Workers possess maximum I/O processing capability, which directly contributed to the >50% reduction in overall processing time by optimising resource utilisation.
+
+   - A. RDD Parallelism Tuning (244s → 89s):
+     - Action: Analysis showed the default Spark RDD distribution utilised only 2 partitions, severely limiting cluster usage. By programmatically increasing the partitioning parameter to 16, we forced the full utilisation of all 8 Worker nodes.
+     - Result: This software tuning successfully reduced the total processing time from 244 seconds to 89 seconds (≈64% reduction), proving the necessity of customised parallelism.
+
+   - B. Experimental I/O Scaling Proof:
+     - Goal: To confirm that I/O capacity scales horizontally with the number of disk controllers (VMs), not just vCPU count, confirming the SSD setup.
+     - Finding: Comparative testing across 1×8 vCPU, 4×2 vCPU, and 8×1 vCPU configurations validated that the total disk I/O rate increased significantly with the number of VMs. This confirmed that the pipeline's bottleneck was successfully moved to the network/VM disk quota, justifying the distributed SSD architecture.
+
 
 ### Part II: Scientific Validation and 40× Proof
 
