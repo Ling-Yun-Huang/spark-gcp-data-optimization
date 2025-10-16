@@ -14,45 +14,57 @@ This project addresses the scalability bottleneck of complex data transformation
    - Through OLS regression analysis, **proved 40 times greater read efficiency**, providing a strong scientific basis for the engineering decisions.
 
 ---
-## Detailed Architecture and Performance Analysis
-This section details the core architectural decisions and scientific methodologies that maximised throughput and minimised cloud processing time.
+## I. High-Impact Solution Architecture (The Execution)
 
-### Part I: Implementation and Resource Optimisation
+This section details the two core architectural decisions that maximized throughput and minimized cloud processing time.
 
-**1. Scalable Data Transformation Pipeline**
-   - **Problem**: To eliminate the single-point bottleneck inherent in raw file I/O and serialisation during ETL phases.
-   - **Solution**: Leveraged the **PySpark RDD** functions to fully distribute the data transformation and TFRecord writing operations, enabling parallel **I/O streams across all Worker** nodes. (See code/tfrecord_parallel_writer.py)
+### 1. Scalable Data Transformation Pipeline
 
-**2. Resource Governance and Cluster Optimisation**
-   - Strategy: Executed precise GCP Dataproc Cluster Configuration (e.g., utilising SSD persistent disks and high vCPU counts) to shift the pipeline's bottleneck from CPU to network I/O.
+* **Problem Solved:** Elimination of the single-point bottleneck inherent in raw file I/O and serialization.
 
-   - A. RDD Parallelism Tuning (244s → 89s):
-     - Action: Analysis showed the default Spark RDD distribution utilised only 2 partitions, severely limiting cluster usage. By programmatically increasing the partitioning parameter to 16, we forced the full utilisation of all 8 Worker nodes.
-     - Result: This software tuning successfully reduced the total processing time from 244 seconds to 89 seconds (≈64% reduction), proving the necessity of customised parallelism.
+* **Engineering Solution:** Leveraged the PySpark RDD mapPartitionsWithIndex function to fully distribute the **data transformation and** **TFRecord** **writing** operations, enabling parallel I/O streams across all **Worker** nodes.
 
-   - B. Experimental I/O Scaling Proof:
-     - Goal: To confirm that I/O capacity scales horizontally with the number of disk controllers (VMs), not just vCPU count, confirming the SSD setup.
-     - Finding: Comparative testing across 1×8 vCPU, 4×2 vCPU, and 8×1 vCPU configurations validated that the total disk I/O rate increased significantly with the number of VMs. This confirmed that the pipeline's bottleneck was successfully moved to the network/VM disk quota, justifying the distributed SSD architecture.
+### 2. Resource Governance and Cluster Optimization
+
+* **Strategy:** Executed precise **GCP Dataproc** **Cluster Configuration** (e.g., utilizing **SSD** persistent disks and high **vCPU** counts) to shift the pipeline's bottleneck from **CPU** to network **I/O**.
+* **Parallelism Tuning Result:** Through strategic **RDD Partitioning** (2 → 16), we fully utilized all 8 Worker nodes, directly reducing the total processing time from **244 seconds to 89 seconds (≈64% reduction)**.
+* **Hardware Validation:** Comparative cluster testing confirmed that I/O capacity scales horizontally with the number of **VMs**, justifying the distributed **SSD** architecture.
+* **Detailed Analysis:** For the full experimental results, including the rationale for RDD and VM configuration choices, please refer to [Resource Optimization Detailed Analysis](https://www.google.com/search?q=docs/resource_optimization_details.md).
 
 
-### Part II: Scientific Validation and 40× Proof
+## II. Quantified Performance Impact & Validation
 
-The part was validated by rigorous benchmarking, comparing the operational performance of the optimised architecture against baseline methods.
+The project's success is validated by rigorous benchmarking, comparing the operational performance of the optimized architecture against baseline methods.
 
-1. Performance Testing Mechanism
-   - Methodology: A dedicated Spark Job (spark_speed_test_job.py) was designed to run multiple read tests in parallel, directly contrasting the read throughput of the optimised format vs. the raw image files.
-   - Data Integrity: Introduced RDD.cache() during the analysis phase to eliminate the Spark re-computation bottleneck, ensuring that performance metrics accurately reflected true I/O speed.
+### 1. Performance Testing Mechanism
 
-2. Statistical Proof: OLS Regression Analysis
-   - The 40× performance gain was validated using OLS Linear Regression Analysis on the distributed test data.
-   - Analysis Document: Please refer to Performance Verification and Statistical Analysis
+* **Methodology:** A dedicated **Spark Job** ([spark_speed_test_job.py](https://www.google.com/search?q=code/spark_speed_test_job.py)) was designed to run multiple read tests in parallel, **directly contrasting the read throughput of the optimized format vs. the raw image files**.
 
----
-### Project Files and Code Structure
+* **Data Integrity:** Introduced **RDD.cache()** during the analysis phase to eliminate the **Spark** **re-computation bottleneck**, ensuring that performance metrics accurately reflected true I/O speed.
 
+### 2. Statistical Proof: OLS Regression Analysis
 
+The **40×** performance gain was validated using **OLS** **Linear Regression Analysis** on the distributed test data.
 
----
-#### Attribution Note
+* **Analysis Document:** Please refer to [Performance Verification and Statistical Analysis](https://www.google.com/search?q=docs/performance_verification_and_analysis.md)
+
+| Key Metric | Raw Image Files (Intercept) | Optimized **TFRecord** (Intercept) | Professional Conclusion |
+| :--- | :--- | :--- | :--- |
+| **Baseline Read Speed (IPS)** | $\approx$ **9 IPS** | $\approx$ **360 IPS** | **40× Structural Advantage**: The optimized format achieves **40** times higher intrinsic read throughput than raw files, after isolating the effect of **Batch** parameters. |
+| **Batch Size Response Coefficient** | **0.054** | **23.671** | Proves the optimized format efficiently utilizes cloud I/O aggregation capabilities, with a **438** **times** greater responsiveness to parameter tuning than the raw format. |
+
+## III. Project Files and Code Structure
+
+| File/Directory | Description | Purpose |
+| :--- | :--- | :--- |
+| `README.md` (This file) | **Project Story and Executive Summary** | High-level narrative to guide reviewers to key evidence. |
+| `docs/resource_optimization_details.md` | **Detailed GCP VM and RDD Optimization Analysis** | Provides the technical evidence for the **>50%** runtime reduction. |
+| `code/tfrecord_parallel_writer.py` | **Core 40× optimization logic** for **PySpark** transformation and writing. | Demonstrates distributed programming capability. |
+| `code/spark_speed_test_job.py` | **Spark** parallel performance testing and **RDD.cache()** optimization. | Demonstrates performance analysis capability. |
+| `docs/performance_verification_and_analysis.md` | **Statistical proof and OLS data interpretation**. | Demonstrates scientific validation capability. |
+| `config/gcp_datapro_submit_config.sh` | **GCP Dataproc** **Cluster Configuration and Job submission script**. | Demonstrates cloud resource management capability. |
+| `assets/` | Includes **GCP** **VM** **CPU/Network** load screenshots. | Provides empirical data from cloud operation. |
+
+## IV. Declaration
 
 This project was part of an MSc academic module at the *City, University of London*, focusing on **Big Data** Coursework 2024, and all code and analysis were completed independently.
