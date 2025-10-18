@@ -41,7 +41,7 @@ The project's success is validated by rigorous benchmarking, comparing the opera
 
 ### 1. Performance Testing Mechanism
 
-* **Methodology:** A dedicated **Spark Job** (see `code/spark_speed_test_job.py`) was designed to run multiple read tests in parallel, **directly contrasting the read throughput of the optimised format vs. the raw image files**.
+* **Methodology:** A dedicated **Spark Job** was designed to run multiple read tests in parallel, **directly contrasting the read throughput of the optimised format vs. the raw image files**.
 
 * **Data Integrity:** Applied **`RDD.cache()`** during analysis to **isolate true I/O speed** by preventing Spark's internal re-computation and ensuring metrics purely reflected read throughput.
 
