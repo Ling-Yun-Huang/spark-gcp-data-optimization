@@ -30,7 +30,7 @@ This section highlights the core architectural decisions that drove the signific
 ### 2. ☁️ Resource Optimisation (64% Time Reduction)
 
 * **Strategy:** Configured **GCP Dataproc** (SSD, high vCPU) to intentionally shift the bottleneck from **CPU** to the faster **Network I/O** capacity.
-* **Parallelism Tuning Result:** Achieved maximum resource utilization by matching **16 RDD Partitions** directly to the **16 vCPUs** across 8 Worker nodes. This reduced total processing time from **244 seconds to 89 seconds (a ≈64% time reduction)**.
+* **Parallelism Tuning Result:** Achieved maximum resource utilisation by matching **16 RDD Partitions** directly to the **8 vCPUs** across 8 Worker nodes. This reduced total processing time from **244 seconds to 89 seconds (a ≈64% time reduction)**.
 * **Detailed Analysis:** For full resource rationale, see [Resource Optimisation Detailed Analysis](docs/resource_optimisation_details.md).
 
 ---
