@@ -58,7 +58,7 @@ The **40×** performance gain was validated using **OLS Linear Regression Analys
 * **Analysis Document:** Please refer to [Performance Verification and Statistical Analysis](docs/performance_verification_and_analysis.md)
 
 | Key Metric | Raw Files (Baseline) | **TFRecord** (Result) | Conclusion |
-| :--- | ---: | ---: | :--- |
+| :---: | :---: | :---: | :---: |
 | **Baseline Read Speed (IPS)** | $\approx$ **9 IPS** | $\approx$ **360 IPS** | **40× Structural Advantage** |
 | **Batch Size Response Coefficient** | **0.054** | **23.671** | **438× Greater Responsiveness** |
 
@@ -80,19 +80,7 @@ Insights translate into clear strategies for different workloads:
 * **Stream Processing:** **Minimise latency** through dynamic resource scaling (up/down based on load) and optimising data placement for real-time responsiveness.
 
 ---
-
-## 📁 IV. Project Files and Code Structure
-
-| File/Directory | Description | Purpose |
-| :--- | :--- | :--- |
-| `README.md` (This file) | **Project Story and Executive Summary** | High-level narrative to guide reviewers to key evidence. |
-| `docs/resource_optimization_details.md` | **Detailed GCP VM and RDD Optimization Analysis** | Provides the technical evidence for the **>50%** runtime reduction. |
-| `code/tfrecord_parallel_writer.py` | **Core 40× optimization logic** for **PySpark** transformation and writing. | Demonstrates distributed programming capability. |
-| `code/spark_speed_test_job.py` | **Spark** parallel performance testing and **RDD.cache()** optimization. | Demonstrates performance analysis capability. |
-| `docs/performance_verification_and_analysis.md` | **Statistical proof and OLS data interpretation**. | Demonstrates scientific validation capability. |
-
----
-## 🎓 V. Project Context and Declaration
+## 🎓 IV. Project Context and Declaration
 
 This project was developed as part of an **MSc academic module** at the **City, University of London**, focusing on **Big Data** Coursework 2024, with all code and analysis completed **independently**.
 
