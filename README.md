@@ -1,5 +1,3 @@
-> 🧩 This repo is currently under development (last edited: Oct 2025)
-
 # 🚀 Parallelised Data Processing with Spark on Google Cloud: 40x Performance Optimisation for ML Data Pipelines
 
 This project demonstrates expertise in engineering optimisation, cluster resource control, and rigorous performance verification for I/O-intensive data preprocessing pipelines within a large-scale cloud environment (GCP Dataproc).
