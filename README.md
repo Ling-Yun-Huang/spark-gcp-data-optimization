@@ -1,47 +1,96 @@
-# Parallelizing Data Processing with Spark on Google Cloud
+> 🧩 This repo is currently under development (last edited: Oct 2025)
 
-This repository contains the work focusing on parallelization, cloud performance evaluation, and using Spark and TensorFlow/Keras for data processing and machine learning.
+# 🚀 Parallelised Data Processing with Spark on Google Cloud: 40x Performance Optimisation for ML Data Pipelines
 
-This is the Big Data coursework from my MSc in Data Science at City, University of London, where I achieved **distinction**.
+This project demonstrates expertise in engineering optimisation, cluster resource control, and rigorous performance verification for I/O-intensive data preprocessing pipelines within a large-scale cloud environment (GCP Dataproc).
+
+## 🎯 Abstract
+This project addresses the scalability bottleneck of complex data transformation and ingestion within the ML data preparation workflow.
+
+**1. Implementation and Resource Optimisation:**
+   - Utilised PySpark parallelisation and precisely optimised GCP cluster configurations.
+   - Successfully **reduced total data write/transformation time by over 50%**.
+
+**2. Scientific Validation and 40× Proof:**
+   - Designed distributed performance tests comparing the read throughput of the optimised format against the raw file format.
+   - Through OLS regression analysis, **proved 40 times greater read efficiency**, providing a strong scientific basis for the engineering decisions.
+
+---
+## ⚙️ I. High-Impact Solution Architecture
+
+This section highlights the core architectural decisions that drove the significant performance increase and resource efficiency.
+
+### 1. ⚡️ RDD Parallelisation (I/O Improvement)
+
+* **Problem Solved:** Serialization and I/O bottlenecks in transformation pipelines using external code.
+* **Engineering Solution (RDD Focus):**
+  - **I/O Efficiency:** Used **`RDD.mapPartitionsWithIndex`** to ensure each partition independently wrote to a single file on GCS. This strategy **eliminated network Shuffle** and maximised parallel I/O throughput.
+  - **External Code Integration:** Deployed complex, external transformation logic onto Spark Workers using the **`tf.py_function` adapter**, successfully bridging the compatibility gap between RDDs and the required library.
+
+### 2. ☁️ Resource Optimisation (64% Time Reduction)
+
+* **Strategy:** Configured **GCP Dataproc** (SSD, high vCPU) to intentionally shift the bottleneck from **CPU** to the faster **Network I/O** capacity.
+* **Parallelism Tuning Result:** Achieved maximum resource utilisation by matching **16 RDD Partitions** directly to the **8 vCPUs** across 8 Worker nodes. This reduced total processing time from **244 seconds to 89 seconds (a ≈64% time reduction)**.
+* **Detailed Analysis:** For full resource rationale, see [Resource Optimisation Detailed Analysis](docs/resource_optimisation_details.md).
+
+---
+## 🧪 II. Quantified Performance Impact & Validation
+
+The project's success is validated by rigorous benchmarking, comparing the operational performance of the optimised architecture against baseline methods.
+
+### 1. Performance Testing Mechanism
+
+* **Methodology:** A dedicated **Spark Job** (see `code/spark_speed_test_job.py`) was designed to run multiple read tests in parallel, **directly contrasting the read throughput of the optimised format vs. the raw image files**.
+
+* **Data Integrity:** Applied **`RDD.cache()`** during analysis to **isolate true I/O speed** by preventing Spark's internal re-computation and ensuring metrics purely reflected read throughput.
+
+### 2. Statistical Proof: OLS Regression Analysis
+
+The **40×** performance gain was validated using **OLS Linear Regression Analysis** on the distributed test data.
+
+> **💡 Key Quantified Impact:**
+> * **Baseline Speed Increase:** **40×** Higher Intrinsic Read Throughput.
+> * **System Responsiveness:** **438×** Greater Efficiency Response to Parameter Tuning.
+
+* **Analysis Document:** Please refer to [Performance Verification and Statistical Analysis](docs/performance_verification_and_analysis.md)
+
+| Key Metric | Raw Files (Baseline) | **TFRecord** (Result) | Conclusion |
+| :--- | ---: | ---: | :--- |
+| **Baseline Read Speed (IPS)** | $\approx$ **9 IPS** | $\approx$ **360 IPS** | **40× Structural Advantage** |
+| **Batch Size Response Coefficient** | **0.054** | **23.671** | **438× Greater Responsiveness** |
 
 ---
 
-## Sections:
+## 🧠 III. Strategic Context & Future Work
 
-### 1. Preprocessing and Parallelization with Spark
-- **Task**: Preprocess image data (Flowers dataset) using TensorFlow and parallelize the process with Apache Spark on Google Cloud.
-- **Code**: The preprocessing code was adapted for Spark and executed on the cloud using Google Cloud Dataproc.
-- **Tools Used**: Apache Spark, Google Cloud Dataproc, Python
-- **Outcome**: Parallelized preprocessing to improve processing speed and scalability.
+This section connects the project's optimisation work to advanced cloud strategies and defines future application scenarios.
 
-### 2. Measuring Cloud Performance
-- **Task**: Parallelize the measurement of reading speeds in cloud configurations using Spark.
-- **Code**: Performance measuring code executed in cloud environments, utilizing Spark for parallel processing.
-- **Tools Used**: Apache Spark, Google Cloud Dataproc
-- **Outcome**: Performance metrics collected for various cloud configurations.
+### 1. 💡 Alignment with Adaptive Cloud Optimisation
 
-### 3. Theoretical Discussion
-- **Task**: A theoretical analysis based on a paper, discussed in the report.
-- **Outcome**: Analytical answers provided as a part of the coursework submission.
+Our RDD-based methodology (Partitioning, Caching) directly supports the concepts of **predicting and selecting optimal cloud configurations** (e.g., CherryPick). Our **OLS regression models** provide the **empirical performance data** necessary for intelligent, adaptive system decision-making.
+
+### 2. 📈 Application Strategies
+
+Insights translate into clear strategies for different workloads:
+
+* **Batch Processing:** **Maximise throughput** by optimising cluster resource balance and applying adaptive methods (Bayesian Optimisation) to reduce setup costs.
+* **Stream Processing:** **Minimise latency** through dynamic resource scaling (up/down based on load) and optimising data placement for real-time responsiveness.
 
 ---
 
-## Technologies & Tools Used:
-- **Apache Spark**: For parallelizing data processing tasks.
-- **Google Cloud Dataproc**: Cloud platform used for executing Spark tasks.
-- **TensorFlow/Keras**: Used for data preprocessing tasks.
-- **Python**: Programming language used for implementation.
+## 📁 IV. Project Files and Code Structure
 
-## Repository Structure:
-- **`/code`**: Contains the code I wrote for preprocessing and cloud performance evaluation tasks.
-- **`/report`**: Contains the PDF report with theoretical discussions and performance analysis.
-- **`README.md`**: This file providing an overview of the coursework.
+| File/Directory | Description | Purpose |
+| :--- | :--- | :--- |
+| `README.md` (This file) | **Project Story and Executive Summary** | High-level narrative to guide reviewers to key evidence. |
+| `docs/resource_optimization_details.md` | **Detailed GCP VM and RDD Optimization Analysis** | Provides the technical evidence for the **>50%** runtime reduction. |
+| `code/tfrecord_parallel_writer.py` | **Core 40× optimization logic** for **PySpark** transformation and writing. | Demonstrates distributed programming capability. |
+| `code/spark_speed_test_job.py` | **Spark** parallel performance testing and **RDD.cache()** optimization. | Demonstrates performance analysis capability. |
+| `docs/performance_verification_and_analysis.md` | **Statistical proof and OLS data interpretation**. | Demonstrates scientific validation capability. |
 
 ---
+## 🎓 V. Project Context and Declaration
 
-## Notes:
-This coursework involves practical applications of Spark and cloud computing. While parts of the project are based on lessons from the [Fast and Lean Data Science](https://github.com/GoogleCloudPlatform/training-data-analyst/tree/master/courses/fast-and-lean-data-science) course by Martin Gorner, the implementations and outcomes are my own contributions. 
+This project was developed as part of an **MSc academic module** at the **City, University of London**, focusing on **Big Data** Coursework 2024, with all code and analysis completed **independently**.
 
-## License
-
-This project is licensed under the [MIT License](LICENSE).
+* **Origin:** The initial data transformation concepts are based on lessons 3 and 4 of the [Fast and Lean Data Science](https://github.com/GoogleCloudPlatform/training-data-analyst/tree/master/courses/fast-and-lean-data-science) course by Martin Gorner, adapted here to a distributed **PySpark/RDD** architecture for extreme performance scaling.
