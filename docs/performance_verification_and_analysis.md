@@ -50,9 +50,9 @@ This table presents the full OLS analysis results, where P-values less than 0.00
 
 #### C. Visual and Analytical Discussion
 
-* **Visual Evidence:** **Figure 4** displays the individual output values, average values, and the derived regression lines for each parameter. The visual separation between the Raw Files and **TFRecord** regression lines clearly illustrates the **40× throughput disparity**.
+* **Visual Evidence:** **The Figure** displays the individual output values, average values, and the derived regression lines for each parameter. The visual separation between the Raw Files and **TFRecord** regression lines clearly illustrates the **40× throughput disparity**.
 
-<img src="../assets/OLS.png" width="800">
+<img src="../assets/OLS.png" width="1000">
 
 * **Latency Context:** The **40× speed difference** aligns with known cloud latency figures, underscoring the necessity of prioritising optimised storage and retrieval in large-scale ML applications.
 
