@@ -20,18 +20,21 @@ This project addresses the scalability bottleneck of complex data transformation
 
 This section highlights the core architectural decisions that drove the significant performance increase and resource efficiency.
 
-### 1. ⚡️ RDD Parallelisation (I/O Improvement)
+### 1. ⚡️ Data Pipeline Optimization (I/O & Integration)
+* **I/O Efficiency:** Used **`RDD.mapPartitionsWithIndex`** to ensure each partition independently wrote to a single file on GCS. This strategy **eliminated network Shuffle** and maximised parallel I/O throughput.
+* **External Code Integration:** Deployed complex, external transformation logic onto Spark Workers using the **`tf.py_function` adapter**, successfully bridging the compatibility gap between RDDs and the required library.
 
-* **Problem Solved:** Serialization and I/O bottlenecks in transformation pipelines using external code.
-* **Engineering Solution (RDD Focus):**
-  - **I/O Efficiency:** Used **`RDD.mapPartitionsWithIndex`** to ensure each partition independently wrote to a single file on GCS. This strategy **eliminated network Shuffle** and maximised parallel I/O throughput.
-  - **External Code Integration:** Deployed complex, external transformation logic onto Spark Workers using the **`tf.py_function` adapter**, successfully bridging the compatibility gap between RDDs and the required library.
+### 2. 🧠 Maximise Internal Parallelism (RDD Tuning)
 
-### 2. ☁️ Resource Optimisation (64% Time Reduction)
+* **Experiment:** Conducted comparative testing (2 vs. 16 partitions) to identify the optimal RDD parallelism level that fully engaged the cluster resources.
+* **Result:** Confirmed that **16 RDD Partitions** were necessary to achieve full machine utilization. This strategic choice **reduced total processing time from 244 seconds to 89 seconds (a ≈64% time reduction)**, driving the core performance gain.
 
-* **Strategy:** Configured **GCP Dataproc** (SSD, high vCPU) to intentionally shift the bottleneck from **CPU** to the faster **Network I/O** capacity.
-* **Parallelism Tuning Result:** Achieved maximum resource utilisation by matching **16 RDD Partitions** directly to the **8 vCPUs** across 8 Worker nodes. This reduced total processing time from **244 seconds to 89 seconds (a ≈64% time reduction)**.
-* **Detailed Analysis:** For full resource rationale, see [Resource Optimisation Detailed Analysis](docs/resource_optimisation_details.md).
+### 3. ☁️ Optimal Cloud Configuration Search (Hardware Strategy)
+
+* **Strategy:** Used the optimised RDD setting (16 partitions) to benchmark various **GCP Dataproc** configurations (SSD, high vCPU counts).
+* **Final Result:** Selected the configuration (matching **16 RDD Partitions** to the cluster's **8 vCPUs**) that intentionally shifted the bottleneck from **CPU** to the faster **Network I/O** capacity, ensuring the 64% gain was sustained under optimal hardware conditions.
+
+> **Detailed Analysis:** For full experimental rationale, see [Resource Optimisation Detailed Analysis](docs/resource_optimisation_details.md).
 
 ---
 ## 🧪 II. Quantified Performance Impact & Validation
